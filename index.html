@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Penalquiz</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#07111A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Penalquiz">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+  html,body{margin:0;height:100%;background:#07111A;color:#F2F5EE;font-family:Arial,Helvetica,sans-serif}
+  .carga{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:0 20px}
+  .carga b{font-size:40px;letter-spacing:.04em}
+  .carga small{opacity:.7;font-size:15px;max-width:340px;line-height:1.4}
+  .pelota{font-size:46px;animation:gira 1s linear infinite}
+  @keyframes gira{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="carga"><div class="pelota">⚽</div><b>PENALQUIZ</b><small id="msg">Cargando…</small></div>
+<script>
+  // ⚠️ ÚNICA LÍNEA PARA EDITAR: pega entre las comillas el link /exec de tu implementación de Apps Script
+  const WEB_APP = 'https://script.google.com/macros/s/AKfycbzQ4aLTYSi20gMDzJrSRlR4E6FVxxkFKY78WHLiVey4pYYA4tyDA6rYrNmE60Z2PNzQlg/exec';
+
+  // Cargador fijo: pide la pantalla del juego al Apps Script, la guarda en el navegador y la muestra.
+  // Cuando hay una versión nueva, la app se actualiza sola (no hace falta tocar GitHub).
+  (function () {
+    var base = location.href.split('#')[0].split('?')[0].replace(/[^/]*$/, '');
+    var msg = function (t) { var m = document.getElementById('msg'); if (m) m.textContent = t; };
+    var leer = function () { try { return JSON.parse(localStorage.getItem('pq_ui') || 'null'); } catch (e) { return null; } };
+    var guardar = function (d) { try { localStorage.setItem('pq_ui', JSON.stringify(d)); } catch (e) {} };
+
+    function mostrar(d) {
+      var head = '<!doctype html><html lang="es"><head><meta charset="utf-8">' +
+        '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Penalquiz</title>' +
+        '<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#07111A">' +
+        '<link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" href="favicon.png"></head><body>' +
+        '<script>window.PQ=' + JSON.stringify({ api: WEB_APP, base: base, v: d.v }) + ';<\/script>';
+      document.open();
+      document.write(head + d.html + '</body></html>');
+      document.close();
+    }
+
+    if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(WEB_APP)) {
+      msg('Falta configurar el link del servidor: abre index.html en GitHub y pega tu link /exec en WEB_APP.');
+      return;
+    }
+
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+
+    var cache = leer();
+    if (cache && cache.html) { mostrar(cache); return; }   // la pantalla compara versiones y recarga sola si hay una nueva
+
+    fetch(WEB_APP + '?ui=1').then(function (r) { return r.json(); }).then(function (d) {
+      if (!d || !d.html) throw new Error('sin pantalla');
+      guardar(d); mostrar(d);
+    }).catch(function () {
+      msg('No pudimos conectar con el servidor. Revisa tu internet o que la implementación tenga acceso "Cualquier usuario".');
+    });
+  })();
+</script>
+</body>
+</html>
