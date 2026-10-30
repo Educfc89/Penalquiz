@@ -25,6 +25,9 @@
   // ⚠️ ÚNICA LÍNEA PARA EDITAR: pega entre las comillas el link /exec de tu implementación de Apps Script
   const WEB_APP = 'https://script.google.com/macros/s/AKfycbzQ4aLTYSi20gMDzJrSRlR4E6FVxxkFKY78WHLiVey4pYYA4tyDA6rYrNmE60Z2PNzQlg/exec';
 
+  // Guarda el aviso de "instalar app" para que lo use el botón 📲 de la pantalla del juego
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); window.__pqInstalar = e; });
+
   // Cargador fijo: pide la pantalla del juego al Apps Script, la guarda en el navegador y la muestra.
   // Cuando hay una versión nueva, la app se actualiza sola (no hace falta tocar GitHub).
   (function () {
