@@ -7,8 +7,8 @@
   "scope": "/Penalquiz/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#07111A",
-  "theme_color": "#07111A",
+  "background_color": "#020B08",
+  "theme_color": "#020B08",
   "lang": "es",
   "icons": [
     {

@@ -1,6 +1,6 @@
 // Penalquiz · service worker: permite instalar la app y abrirla rápido (primero red, si no hay, lo guardado)
-const CACHE = 'penalquiz-v2';
-const BASICOS = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'favicon.png'];
+const CACHE = 'penalquiz-v3';
+const BASICOS = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'favicon.png', 'logo.png', 'portada-720.jpg'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(BASICOS)).catch(() => {})); self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
 self.addEventListener('fetch', e => {
